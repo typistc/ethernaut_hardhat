@@ -10,8 +10,20 @@ const func:DeployFunction = async function (hre: HardhatRuntimeEnvironment){
     console.log("Attach Privacy Contract");
     const Privacy = await ethers.getContractFactory("Privacy",(await ethers.getSigners())[0]) as Privacy__factory;
     const privacy = Privacy.attach(privacyAddress);
-    const solt3 = await ethers.provider.getStorageAt(privacyAddress,3)
-    console.log("Privacy data[2](solt[3]):",solt3.);    
+    console.log("first locked is:",await privacy.locked());
+    
+    const solt5 = await ethers.provider.getStorageAt(privacyAddress,5)
+    //获取
+    console.log("get Privacy data[2](solt[3]):",solt5); 
+    const solt16 = solt5.substring(0,34)
+    console.log("solt16 bytes16 :",solt16.length);
+    
+
+    //解锁
+    const privacyArgs =await privacy.unlock(solt16);
+    await privacyArgs.wait();
+    console.log("seconds locked is:",await privacy.locked());
+
     
 }
 
